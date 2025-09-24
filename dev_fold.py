@@ -4,6 +4,7 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
+import argparse
 import json
 
 import cv2
@@ -13,8 +14,6 @@ import mmengine
 import numpy as np
 import pandas as pd
 import torch
-from gpat.utils.files import FileName
-from gpat.utils.utils import calculate_iou, get_file_name
 from mmdet.apis import inference_detector, init_detector
 from mmpose.apis import inference_topdown
 from mmpose.apis import init_model as init_pose_estimator
@@ -22,7 +21,9 @@ from mmpose.evaluation.functional import nms
 from mmpose.registry import VISUALIZERS
 from mmpose.structures import merge_data_samples
 from mmpose.utils import adapt_mmdet_pipeline
-import argparse
+
+from gpat.utils.files import FileName
+from gpat.utils.utils import calculate_iou, get_file_name
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--input', type=str, required=True, help='input image directory')
@@ -109,10 +110,10 @@ for img_name in img_files:
         draw_gt=False,
         )
 
-
+    image = visualizer.get_image()
     cv2.imwrite(
             os.path.join(output_dir, img_name),
-            cv2.cvtColor(visualizer.get_image(), cv2.COLOR_RGB2BGR)
+            image
         )
 position_df = pd.concat([position_df, xyxy_df.drop('filename', axis=1)], axis=1)
 position_df.set_index('filename', inplace=True)
