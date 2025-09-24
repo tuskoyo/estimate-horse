@@ -1,0 +1,12 @@
+.venv
+.vscode
+*.egg-info
+**/__pycache__/**
+__pycache__/
+
+video/
+out/
+models/
+pregrant-predict/data/
+
+config.ini
